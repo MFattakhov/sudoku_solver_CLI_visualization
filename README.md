@@ -4,6 +4,8 @@
 ## Helpful information
  Run ```main.py``` to see an example, or edit the code to solve your board.
  
+ ![gif](gif.gif)
+
  (Blue digits are initial ones.)
  
  The solver works by backpropagation, testing every 'solution' until it finds 'the solution'.
