@@ -1,3 +1,4 @@
+from itertools import product
 from typing import List, Tuple
 from bitset import Bitset
 import time
@@ -11,16 +12,16 @@ class SudokuBoard:
 
     @classmethod
     def from_str(cls, s: str) -> 'SudokuBoard':
-        return cls([list(map(int, list(s[9 * i:9 * (i + 1)]))) for i in range(9)])
+        return cls([list(map(int,
+                             list(s[9 * i:9 * (i + 1)]))) for i in range(9)])
 
     def print(self) -> None:
         # makes initial data blue
         board_to_print = [['' for _ in range(9)] for _ in range(9)]
-        for i in range(9):
-            for j in range(9):
-                board_to_print[i][j] = str(self.board[i][j])
-                if self._initial_digits[i][j]:
-                    board_to_print[i][j] = f'\033[94m{board_to_print[i][j]}\033[0m'
+        for i, j in product(range(9), range(9)):
+            board_to_print[i][j] = str(self.board[i][j])
+            if self._initial_digits[i][j]:
+                board_to_print[i][j] = f'\033[94m{board_to_print[i][j]}\033[0m'
 
         for i in range(9):
             if i % 3 == 0 and i != 0:
@@ -56,9 +57,12 @@ class SudokuBoard:
                 return True
 
             cell = get_cell(row, col)
-            contains = row_contains[row] | col_contains[col] | cell_contains[cell]
+            contains = row_contains[row] | \
+                col_contains[col] | \
+                cell_contains[cell]
 
-            if contains == (1 << 9) - 1:  # check if 'contains' contains every digit 1-9
+            # checks if 'contains' contains every digit 1-9
+            if contains == (1 << 9) - 1:
                 return False
 
             for digit in range(1, 10):
